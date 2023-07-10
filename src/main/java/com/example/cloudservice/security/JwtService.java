@@ -52,6 +52,20 @@ public class JwtService {
 
     }
 
+    // проверяем что емайл в токене такой же, как у пользователя
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    }
+
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
     // получение всех параметров из токена
     private Claims extractAllClaims(String token) {
         return Jwts
