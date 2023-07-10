@@ -23,8 +23,8 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/", "/register", "/authenticate").permitAll();
-                    auth.anyRequest().permitAll();
+                    auth.requestMatchers("/","/register", "/authenticate").permitAll();
+                    auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> {
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
