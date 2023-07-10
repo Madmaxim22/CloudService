@@ -23,7 +23,7 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("").permitAll();
+                    auth.requestMatchers("/", "/register", "/authenticate").permitAll();
                     auth.anyRequest().permitAll();
                 })
                 .sessionManagement(session -> {
