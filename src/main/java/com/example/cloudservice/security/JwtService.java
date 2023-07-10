@@ -15,7 +15,7 @@ public class JwtService {
 
     // метод извлечения логина
     public String extractUsername(String token) {
-        return null;
+        return extractClaim(token, Claims::getSubject);
     }
 
     // универсальный метод извлечения параметра
