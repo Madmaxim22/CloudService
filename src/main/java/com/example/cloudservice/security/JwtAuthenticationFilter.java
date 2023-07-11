@@ -42,11 +42,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             // получение данных пользователя из базы данных
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            var isValidToken = tokenRepository.findByToken(jwt)
+            // проверка срока действия токена
+            var isTokenValid = tokenRepository.findByToken(jwt)
                     .map(t -> !t.isExpired() && !t.isRevoker())
                     .orElse(false);
             // валидация токена и пользователя
-            if(jwtService.isTokenValid(jwt, userDetails) && isValidToken) {
+            if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
