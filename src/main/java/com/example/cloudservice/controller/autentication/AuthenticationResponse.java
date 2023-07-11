@@ -1,4 +1,4 @@
-package com.example.cloudservice.controller;
+package com.example.cloudservice.controller.autentication;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
+public class AuthenticationResponse implements Response{
     @JsonProperty("auth-token")
     private String token;
 }

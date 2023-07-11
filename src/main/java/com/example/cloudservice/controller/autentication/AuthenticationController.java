@@ -1,8 +1,10 @@
-package com.example.cloudservice.controller;
+package com.example.cloudservice.controller.autentication;
 
 import com.example.cloudservice.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,10 +22,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticate(
+    public ResponseEntity<Response> authenticate(
             @RequestBody AuthenticationRequest request
     ) {
-        System.out.println(request);
-        return ResponseEntity.ok(service.authenticate(request));
+        try {
+            return ResponseEntity.ok(service.authenticate(request));
+        } catch (BadCredentialsException e) {
+            return new ResponseEntity<>(new ErrorResponse("Неверный данные"), HttpStatus.BAD_REQUEST);
+        }
     }
 }
