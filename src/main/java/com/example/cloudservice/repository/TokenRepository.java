@@ -1,6 +1,6 @@
 package com.example.cloudservice.repository;
 
-import com.example.cloudservice.token.Token;
+import com.example.cloudservice.model.token.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

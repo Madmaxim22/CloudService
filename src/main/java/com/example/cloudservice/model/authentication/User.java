@@ -1,6 +1,6 @@
-package com.example.cloudservice.model;
+package com.example.cloudservice.model.authentication;
 
-import com.example.cloudservice.token.Token;
+import com.example.cloudservice.model.token.Token;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

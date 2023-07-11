@@ -1,4 +1,4 @@
-package com.example.cloudservice.controller;
+package com.example.cloudservice.controller.autentication;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

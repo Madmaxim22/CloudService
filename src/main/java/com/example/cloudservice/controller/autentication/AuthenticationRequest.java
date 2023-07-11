@@ -1,4 +1,4 @@
-package com.example.cloudservice.controller;
+package com.example.cloudservice.controller.autentication;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

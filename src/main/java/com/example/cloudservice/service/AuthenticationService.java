@@ -1,17 +1,18 @@
 package com.example.cloudservice.service;
 
-import com.example.cloudservice.controller.AuthenticationRequest;
-import com.example.cloudservice.controller.AuthenticationResponse;
-import com.example.cloudservice.controller.RegisterRequest;
-import com.example.cloudservice.model.Role;
-import com.example.cloudservice.model.User;
+import com.example.cloudservice.controller.autentication.AuthenticationRequest;
+import com.example.cloudservice.controller.autentication.AuthenticationResponse;
+import com.example.cloudservice.controller.autentication.RegisterRequest;
+import com.example.cloudservice.model.authentication.Role;
+import com.example.cloudservice.model.authentication.User;
 import com.example.cloudservice.repository.TokenRepository;
 import com.example.cloudservice.repository.UserRepository;
 import com.example.cloudservice.security.JwtService;
-import com.example.cloudservice.token.Token;
-import com.example.cloudservice.token.TokenType;
+import com.example.cloudservice.model.token.Token;
+import com.example.cloudservice.model.token.TokenType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) throws BadCredentialsException {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
