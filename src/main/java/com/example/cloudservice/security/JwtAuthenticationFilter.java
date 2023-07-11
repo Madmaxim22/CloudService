@@ -1,5 +1,6 @@
 package com.example.cloudservice.security;
 
+import com.example.cloudservice.repository.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenRepository tokenRepository;
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -40,8 +42,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             // получение данных пользователя из базы данных
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            var isValidToken = tokenRepository.findByToken(jwt)
+                    .map(t -> !t.isExpired() && !t.isRevoker())
+                    .orElse(false);
             // валидация токена и пользователя
-            if(jwtService.isTokenValid(jwt, userDetails)) {
+            if(jwtService.isTokenValid(jwt, userDetails) && isValidToken) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
