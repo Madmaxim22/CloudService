@@ -1,5 +1,6 @@
 package com.example.cloudservice.model.authentication;
 
+import com.example.cloudservice.model.file.FileDB;
 import com.example.cloudservice.model.token.Token;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,8 @@ public class User implements UserDetails {
     private Role role;
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
+    @OneToMany(mappedBy = "user")
+    private List<FileDB> files;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
