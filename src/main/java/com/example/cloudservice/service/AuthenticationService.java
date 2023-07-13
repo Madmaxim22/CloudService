@@ -5,11 +5,11 @@ import com.example.cloudservice.controller.autentication.AuthenticationResponse;
 import com.example.cloudservice.controller.autentication.RegisterRequest;
 import com.example.cloudservice.model.authentication.Role;
 import com.example.cloudservice.model.authentication.User;
+import com.example.cloudservice.model.token.Token;
+import com.example.cloudservice.model.token.TokenType;
 import com.example.cloudservice.repository.TokenRepository;
 import com.example.cloudservice.repository.UserRepository;
 import com.example.cloudservice.security.JwtService;
-import com.example.cloudservice.model.token.Token;
-import com.example.cloudservice.model.token.TokenType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,7 +30,7 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .firstname(request.getFirstname())
-                .lastname(request.getEmail())
+                .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(encoder.encode(request.getPassword()))
                 .role(Role.USER)
