@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,13 @@ public class FileStorageService {
 
     public FileDB download(String filename) {
         return fileDBRepository.findFirstByNameAndUser_Id(filename, getUser().getId()).orElseThrow();
+    }
+
+    @Transactional
+    public FileDB editFileName(String filename, Map<String, Object> payload) {
+        FileDB editFile = fileDBRepository.findFirstByNameAndUser_Id(filename, getUser().getId()).orElseThrow();
+        editFile.setName((String) payload.get("filename"));
+        return fileDBRepository.save(editFile);
     }
 
     private User getUser() {

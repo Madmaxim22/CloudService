@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,6 +46,19 @@ public class FileController {
             FileDB fileDB = fileStorageService.download(filename);
             return new ResponseEntity<>(fileDB.getData(), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/file")
+    public ResponseEntity<?> editFileName(@RequestParam String filename,
+                                          @RequestBody Map<String, Object> payload) {
+        try {
+            fileStorageService.editFileName(filename, payload);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NullPointerException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
