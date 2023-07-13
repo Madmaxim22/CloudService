@@ -32,6 +32,11 @@ public class FileStorageService {
         return fileDB;
     }
 
+    @Transactional
+    public long delete(String filename) {
+        return fileDBRepository.deleteByNameAndUser_Id(filename, getUser().getId());
+    }
+
     private User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
