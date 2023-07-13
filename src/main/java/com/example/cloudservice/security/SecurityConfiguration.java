@@ -27,8 +27,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/", "/register", "/login").permitAll();
-                    auth.anyRequest().authenticated();
+                    auth.requestMatchers("/**").permitAll();
                 })
                 .sessionManagement(session -> {
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
