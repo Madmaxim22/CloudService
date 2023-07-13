@@ -1,6 +1,5 @@
-package com.example.cloudservice.controller.autentication;
+package com.example.cloudservice.controller.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class  AuthenticationRequest {
-    @JsonProperty("login")
+public class RegisterRequest {
+
+    private String firstname;
+    private String lastname;
     private String email;
     private String password;
 }

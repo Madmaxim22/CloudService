@@ -1,8 +1,8 @@
 package com.example.cloudservice.service;
 
-import com.example.cloudservice.controller.autentication.AuthenticationRequest;
-import com.example.cloudservice.controller.autentication.AuthenticationResponse;
-import com.example.cloudservice.controller.autentication.RegisterRequest;
+import com.example.cloudservice.controller.request.AuthenticationRequest;
+import com.example.cloudservice.controller.response.AuthenticationResponse;
+import com.example.cloudservice.controller.request.RegisterRequest;
 import com.example.cloudservice.model.authentication.Role;
 import com.example.cloudservice.model.authentication.User;
 import com.example.cloudservice.model.token.Token;

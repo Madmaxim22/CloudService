@@ -1,5 +1,10 @@
-package com.example.cloudservice.controller.autentication;
+package com.example.cloudservice.controller;
 
+import com.example.cloudservice.controller.request.AuthenticationRequest;
+import com.example.cloudservice.controller.request.RegisterRequest;
+import com.example.cloudservice.controller.response.AuthenticationResponse;
+import com.example.cloudservice.controller.response.ErrorResponse;
+import com.example.cloudservice.controller.response.Response;
 import com.example.cloudservice.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

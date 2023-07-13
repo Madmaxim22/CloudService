@@ -1,6 +1,6 @@
 package com.example.cloudservice.controller;
 
-import com.example.cloudservice.controller.autentication.ErrorResponse;
+import com.example.cloudservice.controller.response.ErrorResponse;
 import com.example.cloudservice.model.file.FileDB;
 import com.example.cloudservice.model.file.FileDto;
 import com.example.cloudservice.service.FileStorageService;
