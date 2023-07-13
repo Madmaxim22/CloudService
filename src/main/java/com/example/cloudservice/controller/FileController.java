@@ -1,6 +1,7 @@
 package com.example.cloudservice.controller;
 
 import com.example.cloudservice.controller.autentication.ErrorResponse;
+import com.example.cloudservice.model.file.FileDB;
 import com.example.cloudservice.service.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,18 @@ public class FileController {
         try {
             fileStorageService.delete(filename);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/file")
+    public ResponseEntity<?> download(@RequestParam String filename) {
+        try {
+            FileDB fileDB = fileStorageService.download(filename);
+            return new ResponseEntity<>(fileDB.getData(), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {

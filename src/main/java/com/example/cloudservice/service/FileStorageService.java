@@ -37,6 +37,11 @@ public class FileStorageService {
         return fileDBRepository.deleteByNameAndUser_Id(filename, getUser().getId());
     }
 
+
+    public FileDB download(String filename) {
+        return fileDBRepository.findFirstByNameAndUser_Id(filename, getUser().getId()).orElseThrow();
+    }
+
     private User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
