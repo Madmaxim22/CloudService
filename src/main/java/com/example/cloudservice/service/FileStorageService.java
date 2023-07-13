@@ -3,6 +3,7 @@ package com.example.cloudservice.service;
 import com.example.cloudservice.model.authentication.User;
 import com.example.cloudservice.model.file.FileDB;
 import com.example.cloudservice.repository.FileDBRepository;
+import com.example.cloudservice.model.file.FileDto;
 import com.example.cloudservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -48,6 +50,12 @@ public class FileStorageService {
         FileDB editFile = fileDBRepository.findFirstByNameAndUser_Id(filename, getUser().getId()).orElseThrow();
         editFile.setName((String) payload.get("filename"));
         return fileDBRepository.save(editFile);
+    }
+
+    public List<FileDto> lists(Integer limit) {
+        List<FileDB> files = fileDBRepository.findAllByUser_Id(getUser().getId());
+        return files.stream()
+                .map(i -> new FileDto(i.getName(), i.getSize())).limit(limit).toList();
     }
 
     private User getUser() {
