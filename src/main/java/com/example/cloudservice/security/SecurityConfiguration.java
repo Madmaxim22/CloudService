@@ -3,6 +3,7 @@ package com.example.cloudservice.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,7 +28,9 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/**").permitAll();
+                    auth.requestMatchers(HttpMethod.OPTIONS, "**").permitAll();
+                    auth.requestMatchers("login", "/register").permitAll();
+                    auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> {
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -47,8 +50,9 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
+                .allowedHeaders("auth-token", "content-type")
                 .allowCredentials(true)
-                .allowedOrigins("http://localhost:8081")
+                .allowedOrigins("http://localhost:8081/")
                 .allowedMethods("*");
     }
 }
