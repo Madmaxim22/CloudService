@@ -3,6 +3,7 @@ package com.example.cloudservice.repository;
 import com.example.cloudservice.model.file.FileDB;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,5 +14,6 @@ public interface FileDBRepository extends JpaRepository<FileDB, Long> {
 
     Optional<FileDB> findFirstByNameAndUser_Id(String filename, long userId);
 
+    @Transactional
     long deleteByNameAndUser_Id(String filename, long userId);
 }
