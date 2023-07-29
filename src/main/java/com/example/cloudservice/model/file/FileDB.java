@@ -3,6 +3,7 @@ package com.example.cloudservice.model.file;
 import com.example.cloudservice.model.authentication.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,10 +23,9 @@ public class FileDB {
     private String name;
     @NotBlank(message = "Filetype is mandatory")
     private String type;
-    @NotBlank(message = "Filesize is mandatory")
+    @NotNull(message = "Filesize is mandatory")
     private Long size;
     @Lob
-    @NotBlank(message = "Filedata is mandatory")
     private byte[] data;
     @ManyToOne
     @JoinColumn(name = "user_id")
