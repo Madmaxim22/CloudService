@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class DemoController {
+public class TestController {
 
-    @GetMapping("demo")
+    @GetMapping("/test")
     public ResponseEntity<String> sayHello() {
-        return ResponseEntity.ok("Hello from secured endpoint");
+        return ResponseEntity.ok("Hello World");
     }
 }
