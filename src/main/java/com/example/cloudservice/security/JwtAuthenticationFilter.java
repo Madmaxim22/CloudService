@@ -19,7 +19,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Value("${application.security.jwt.header}")
@@ -39,7 +38,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
-            log.warn(request.getRequestURI() + " - header authentication is empty or not starts with Bearer");
             return;
         }
 
@@ -61,7 +59,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-        log.warn(request.getRequestURI() + " - email is empty or Authentication is null");
         filterChain.doFilter(request, response);
     }
 }
