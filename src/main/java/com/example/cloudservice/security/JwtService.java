@@ -41,9 +41,9 @@ public class JwtService {
             Token saveToken = tokenRepository.findByToken(token).get();
             saveToken.setExpired(true);
             tokenRepository.save(saveToken);
-            log.debug("The token: " + token + " - lifetime has expired");
+            log.error("The token: " + token + " - lifetime has expired");
         } catch (SignatureException e) {
-            log.debug("The signature token is incorrect");
+            log.error("The signature token is incorrect");
         }
         return null;
     }

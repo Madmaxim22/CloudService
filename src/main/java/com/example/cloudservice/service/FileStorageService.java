@@ -6,6 +6,7 @@ import com.example.cloudservice.repository.FileDBRepository;
 import com.example.cloudservice.model.file.FileDto;
 import com.example.cloudservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FileStorageService {
     private final FileDBRepository fileDBRepository;
     private final UserRepository userRepository;
@@ -32,24 +34,31 @@ public class FileStorageService {
                 .user(getUser())
                 .build();
         fileDBRepository.save(fileDB);
+        log.info("User: {} save {} in data base.", getUser().getEmail(), filename);
         return fileDB;
     }
 
     @Transactional
     public long delete(String filename) {
-        return fileDBRepository.deleteByNameAndUser_Id(filename, getUser().getId());
+        long delete = fileDBRepository.deleteByNameAndUser_Id(filename, getUser().getId());
+        log.info("User: {} delete {} in data base.", getUser().getEmail(), filename);
+        return delete;
     }
 
 
     public FileDB download(String filename) {
-        return fileDBRepository.findFirstByNameAndUser_Id(filename, getUser().getId()).orElseThrow();
+        FileDB fileDB = fileDBRepository.findFirstByNameAndUser_Id(filename, getUser().getId()).orElseThrow();
+        log.info("User: {} download {} in data base.", getUser().getEmail(), filename);
+        return fileDB;
     }
 
     @Transactional
     public FileDB editFileName(String filename, Map<String, Object> payload) {
         FileDB editFile = fileDBRepository.findFirstByNameAndUser_Id(filename, getUser().getId()).orElseThrow();
         editFile.setName((String) payload.get("filename"));
-        return fileDBRepository.save(editFile);
+        fileDBRepository.save(editFile);
+        log.info("User: {} edit filename {} in data base.", getUser().getEmail(), editFile.getName());
+        return editFile;
     }
 
     public List<FileDto> lists(Integer limit) {

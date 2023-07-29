@@ -25,14 +25,14 @@ public class LogoutService implements LogoutHandler {
         final String authHeader = request.getHeader("auth-token");
         final String jwt;
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            log.debug(request.getRequestURI() + " - header authentication is empty or not starts with Bearer");
+            log.warn(request.getRequestURI() + " - header authentication is empty or not starts with Bearer");
             return;
         }
         jwt = authHeader.substring(7);
         var storedToken = tokenRepository.findByToken(jwt)
                 .orElse(null);
         if (storedToken == null) {
-            log.debug(request.getRequestURI() + " - the token: " + jwt + " - does not exist in the database");
+            log.warn(request.getRequestURI() + " - the token: " + jwt + " - does not exist in the database");
             return;
         }
         storedToken.setRevoker(true);

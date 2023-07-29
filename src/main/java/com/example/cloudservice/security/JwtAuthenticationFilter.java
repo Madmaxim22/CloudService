@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
-            log.debug(request.getRequestURI() + " - header authentication is empty or not starts with Bearer");
+            log.warn(request.getRequestURI() + " - header authentication is empty or not starts with Bearer");
             return;
         }
 
@@ -61,7 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-        log.debug(request.getRequestURI() + " - email is empty or Authentication is null");
+        log.warn(request.getRequestURI() + " - email is empty or Authentication is null");
         filterChain.doFilter(request, response);
     }
 }

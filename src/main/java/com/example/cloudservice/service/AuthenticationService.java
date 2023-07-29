@@ -11,6 +11,7 @@ import com.example.cloudservice.repository.TokenRepository;
 import com.example.cloudservice.repository.UserRepository;
 import com.example.cloudservice.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationService {
 
     private final UserRepository repository;
@@ -38,6 +40,7 @@ public class AuthenticationService {
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         saveUserToken(savedUser, jwtToken);
+        log.info("User: {} add in data base.", user.getEmail());
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
