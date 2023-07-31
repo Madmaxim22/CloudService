@@ -16,7 +16,7 @@
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>cloud_service.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/cloud_service.%d{yyyy-MM-dd}.log</fileNamePattern>
 
             <!-- Храним файлы логов 10 дней -->
             <maxHistory>10</maxHistory>
