@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource("/application-test.properties")
-@Sql(value = {"/data.sql/create-user-before.sql", "/data.sql/create-token-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(value = {"/data.sql/create-token-after.sql", "/data.sql/create-user-after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(value = {"/data/create-user-before.sql", "/data/create-token-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = {"/data/create-token-after.sql", "/data/create-user-after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class TokenRepositoryTest {
     private final String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYWtzaW1AbWFpbC5jb20iLCJpYXQiOjE2OTAzMDg1MzQsImV4cCI6MTY5MDM5NDkzNH0.VM0ACNXe-Xl8_o_NnosQWPGEvczrHzr4Nv7cOTKNW8c";
     @Autowired

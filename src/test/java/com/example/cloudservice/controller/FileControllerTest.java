@@ -15,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
@@ -32,6 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
+@ActiveProfiles(value = "test")
+@TestPropertySource("/application-test.properties")
 class FileControllerTest {
 
     @Autowired
@@ -147,7 +151,7 @@ class FileControllerTest {
     }
 
     @Test
-    void lists() throws Exception {
+    void whenList_thenListFileDBObject() throws Exception {
         Mockito.when(fileStorageService.lists(2)).thenReturn(List.of(
                 new FileDto("for.txt", 233L),
                 new FileDto("wer.pdf", 322L)));

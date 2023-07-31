@@ -15,8 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource("/application-test.properties")
-@Sql(value = {"/data.sql/create-user-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(value = {"/data.sql/create-user-after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(value = {"/data/create-user-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = {"/data/create-user-after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
@@ -41,8 +41,8 @@ class UserRepositoryTest {
         User saveUser = userRepository.findByEmail("test@mail.com").get();
 
         assertNotNull(saveUser);
-        assertEquals(saveUser.getFirstname(), "petr");
-        assertEquals(saveUser.getLastname(), "semin");
-        assertEquals(saveUser.getRole(), Role.USER);
+        assertEquals("petr", saveUser.getFirstname());
+        assertEquals("semin", saveUser.getLastname());
+        assertEquals(Role.USER, saveUser.getRole());
     }
 }

@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -21,17 +24,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
+@ActiveProfiles(value = "test")
+@TestPropertySource("/application-test.properties")
+@Sql(value = {"/data/create-user-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = {"/data/create-user-after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class AuthenticationControllerTest {
-    private static final String USERNAME = "madmaxim22@gmail.com";
     private static final String PASSWORD = "1234";
     @Autowired
     private MockMvc mvc;
 
     @Test
-    void register() throws Exception {
+    void whenRegister_thenReturnToken() throws Exception {
         Map<String, Object> payload = new HashMap<>();
-        payload.put("email", USERNAME);
+        payload.put("email", "maksim@mail.com");
         payload.put("password", PASSWORD);
         payload.put("firstname", "maksim");
         payload.put("lastname", "ytehin");
@@ -47,13 +53,14 @@ class AuthenticationControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String token = result.getResponse().getContentAsString();
+
         assertNotNull(token);
     }
 
     @Test
-    void whenAuthenticate_thenIsOk() throws Exception {
+    void whenAuthenticate_thenReturnTokenAndIsOk() throws Exception {
         Map<String, Object> payload = new HashMap<>();
-        payload.put("login", USERNAME);
+        payload.put("login", "test@mail.com");
         payload.put("password", PASSWORD);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
@@ -67,13 +74,14 @@ class AuthenticationControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String token = result.getResponse().getContentAsString();
+
         assertNotNull(token);
     }
 
     @Test
     void whenAuthenticate_thenIsBadRequest() throws Exception {
         Map<String, Object> payload = new HashMap<>();
-        payload.put("login", "test@mail.com");
+        payload.put("login", "petr@mail.com");
         payload.put("password", PASSWORD);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
