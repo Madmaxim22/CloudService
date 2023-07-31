@@ -31,6 +31,7 @@ public class User implements UserDetails {
     @NotBlank(message = "Lastname is mandatory")
     private String lastname;
     @NotBlank(message = "Email is mandatory")
+    @Column(unique = true)
     private String email;
     @NotBlank(message = "Password is mandatory")
     private String password;
