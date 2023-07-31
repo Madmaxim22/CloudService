@@ -2,8 +2,8 @@ package com.example.cloudservice.service;
 
 import com.example.cloudservice.model.authentication.User;
 import com.example.cloudservice.model.file.FileDB;
-import com.example.cloudservice.repository.FileDBRepository;
 import com.example.cloudservice.model.file.FileDto;
+import com.example.cloudservice.repository.FileDBRepository;
 import com.example.cloudservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +67,7 @@ public class FileStorageService {
                 .map(i -> new FileDto(i.getName(), i.getSize())).limit(limit).toList();
     }
 
-    private User getUser() {
+    public User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         return userRepository.findByEmail(currentPrincipalName).get();
