@@ -19,16 +19,16 @@ create table tokens
     user_id    bigint not null,
     token      varchar(255) not null,
     token_type enum ('BEARER') not null,
-    foreign key (user_id) references users (id)
+    foreign key (user_id) references users (id) on delete cascade on update cascade
 );
 
 create table files
 (
     id      bigint auto_increment primary key,
-    size    bigint not null,
-    user_id bigint not null,
+    size    bigint       not null,
+    user_id bigint       not null,
     name    varchar(255) not null,
     type    varchar(255) not null,
-    data    tinyblob not null,
-    foreign key (user_id) references users (id)
+    data    longblob     not null,
+    foreign key (user_id) references users (id) on delete cascade on update cascade
 )

@@ -26,6 +26,7 @@ public class FileDB {
     @NotNull(message = "Filesize is mandatory")
     private Long size;
     @Lob
+    @Column(columnDefinition = "LONGBLOB")
     private byte[] data;
     @ManyToOne
     @JoinColumn(name = "user_id")
