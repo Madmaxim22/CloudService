@@ -8,6 +8,7 @@ create table users
     firstname varchar(255) not null,
     lastname  varchar(255) not null,
     password  varchar(255) not null,
+    date_create_user date,
     role      enum ('ADMIN', 'USER') null
 );
 
