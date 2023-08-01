@@ -16,16 +16,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 @RestController
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
+    public ResponseEntity<Response> register(
             @Valid @RequestBody RegisterRequest request
     ) {
-        return ResponseEntity.ok(service.register(request));
+        try {
+            return ResponseEntity.ok(service.register(request));
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return new ResponseEntity<>(new ErrorResponse("Пользователь с таким логином уже существует."), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/login")
@@ -35,7 +41,7 @@ public class AuthenticationController {
         try {
             return ResponseEntity.ok(service.authenticate(request));
         } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(new ErrorResponse("Неверное имя или пароль"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ErrorResponse("Неверное имя или пароль."), HttpStatus.BAD_REQUEST);
         }
     }
 }

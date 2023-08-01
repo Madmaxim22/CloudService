@@ -17,6 +17,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,7 +41,7 @@ class AuthenticationServiceTest {
     private final String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYWtzaW1AbWFpbC5jb20iLCJpYXQiOjE2OTAzMDg1MzQsImV4cCI6MTY5MDM5NDkzNH0.VM0ACNXe-Xl8_o_NnosQWPGEvczrHzr4Nv7cOTKNW8c";
 
     @Test
-    void whenRegister_thenReturnToken() {
+    void whenRegister_thenReturnToken() throws SQLIntegrityConstraintViolationException {
         RegisterRequest request = RegisterRequest.builder()
                 .email("test@mail.ru")
                 .firstname("maksim")
