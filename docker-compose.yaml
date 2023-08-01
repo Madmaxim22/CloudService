@@ -1,0 +1,61 @@
+version: '3.9'
+services:
+  frontend:
+    container_name: frontend_app
+    build:
+      context: ./netology-diplom-frontend
+    image: cloudservice-frontend:latest
+    ports:
+      - 8081:8080
+    restart: always
+    depends_on:
+      - backend
+    networks:
+      - frontend
+
+  backend:
+    container_name: backend_app
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: cloudservice-backend:latest
+    ports:
+      - 8080:8080
+    restart: on-failure
+    volumes:
+      - logs_app:/logs
+    depends_on:
+      - mysql_db
+    env_file: ./.env
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql_db:3306/$MYSQLDB_DATABASE?sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false
+      - SPRING_DATASOURCE_USERNAME=$MYSQLDB_USER
+      - SPRING_DATASOURCE_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+    networks:
+      - frontend
+      - backend
+
+  mysql_db:
+    container_name: mysql_db
+    image: "mysql:8.0"
+    restart: unless-stopped
+    ports:
+      - 3307:3306
+    env_file: ./.env
+    environment:
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+      - MYSQL_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - backend
+
+volumes:
+  db:
+  logs_app:
+
+networks:
+  backend:
+  frontend:
+  database:

@@ -3,12 +3,14 @@ package com.example.cloudservice.security;
 import com.example.cloudservice.model.token.Token;
 import com.example.cloudservice.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class JwtService {
 
     @Value("${application.security.jwt.secret-key}")
@@ -32,7 +35,17 @@ public class JwtService {
 
     // метод извлечения логина
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        try {
+            return extractClaim(token, Claims::getSubject);
+        } catch (ExpiredJwtException e) {
+            Token saveToken = tokenRepository.findByToken(token).get();
+            saveToken.setExpired(true);
+            tokenRepository.save(saveToken);
+            log.error("The token: " + token + " - lifetime has expired");
+        } catch (SignatureException e) {
+            log.error("The signature token is incorrect");
+        }
+        return null;
     }
 
     // универсальный метод извлечения параметра
@@ -66,21 +79,13 @@ public class JwtService {
     // проверяем что емайл в токене такой же, как у пользователя
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        return (username.equals(userDetails.getUsername())) && isTokenRevoked(token);
     }
 
-    private boolean isTokenExpired(String token) {
-        if(extractExpiration(token).before(new Date())) {
-            Token saveToken = tokenRepository.findByToken(token).get();
-            saveToken.setExpired(true);
-            tokenRepository.save(saveToken);
-            return true;
-        }
-        return false;
-    }
-
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+    private boolean isTokenRevoked(String token) {
+        return tokenRepository.findByToken(token)
+                .map(t -> !t.isRevoker())
+                .orElse(false);
     }
 
     // получение всех параметров из токена
